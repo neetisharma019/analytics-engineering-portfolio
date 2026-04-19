@@ -1,0 +1,69 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: Cleaned and renamed orders from raw source.
+    columns:
+      - name: order_id
+        description: Primary key for orders.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        data_tests:
+          - not_null
+
+      - name: product_id_id
+        description: Foreign key to stg_product.
+        data_tests:
+          - not_null
+
+      - name: status
+        description: Normalised order status (upper-cased).
+        data_tests:
+          - accepted_values:
+              values: ['COMP', 'COMPLETED', 'PENDING', 'CANCELLED', 'REFUND']
+
+  - name: stg_customers
+    description: Cleaned and renamed customers from raw source.
+    columns:
+      - name: customer_id
+        description: Primary key for customers.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: email
+        description: email address of customers.
+        data_tests:
+          - not_null
+
+      - name: tier
+        description: Customer tier group.
+        data_tests:
+          - accepted_values:
+              values: ['GOLD', 'BRONZE', 'SILVER', 'PLATINUM']
+
+  - name: stg_products
+    description: Cleaned and renamed products from raw source.
+    columns:
+      - name: product_id
+        description: Primary key for products.
+        data_tests:
+          - unique
+          - not_null
+
+      - name: list_price
+        description: List price fro each product.
+        data_tests:
+          - not_null
+
+      - name: category
+        description: Product category.
+        data_tests:
+          - accepted_values:
+              values: ['APPAREL', 'FOOTWEAR', 'ACCESSORIES']
+
+      

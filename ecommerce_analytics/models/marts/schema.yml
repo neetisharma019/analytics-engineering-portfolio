@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "One row per customer with derived fields."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+      - name: tier
+        tests:
+          - accepted_values:
+              values: ['GOLD', 'SILVER', 'PLATINUM', 'BRONZE']
+
+  - name: dim_products
+    description: "One row per product with margin calculations."
+    columns:
+      - name: product_id
+        tests:
+          - unique
+          - not_null
+      - name: list_price
+        tests:
+          - not_null
+      
+
+  - name: fct_orders
+    description: "One row per order with revenue, cost and gross profit."
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['Completed', 'Pending', 'Cancelled', 'Refunded', 'Unknown']
+      
