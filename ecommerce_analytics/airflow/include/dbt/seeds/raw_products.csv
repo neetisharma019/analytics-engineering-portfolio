@@ -1,0 +1,16 @@
+id,prod_nm,ctgry,brnd,lst_price,cst_price,is_active,launch_dt
+P_001,Classic White Tee,apparel,Nova Basics,29.99,8.50,1,2021-01-15
+P_002,Slim Fit Jeans,APPAREL,Nova Denim,79.99,28.00,1,2021-03-01
+P_003,Running Shoe Pro,Footwear,SwiftStep,119.99,45.00,1,2022-06-10
+P_004,Leather Wallet,accessories,Nova Goods,49.99,12.00,1,2021-08-20
+P_005,Yoga Pants,apparel,FlexFit,59.99,18.00,1,2022-01-05
+P_006,Wool Beanie,Accessories,Nova Basics,24.99,6.50,1,2021-11-01
+P_007,Crossbody Bag,ACCESSORIES,Nova Goods,89.99,32.00,1,2022-04-15
+P_008,Hoodie Classic,Apparel,Nova Basics,69.99,22.00,1,2021-05-20
+P_009,Trail Shoe,footwear,SwiftStep,139.99,52.00,1,2022-09-01
+P_010,Canvas Tote,accessories,Nova Goods,34.99,9.00,1,2021-07-10
+P_011,Denim Jacket,APPAREL,Nova Denim,129.99,48.00,1,2022-02-28
+P_012,Sports Socks 3pk,Apparel,FlexFit,19.99,5.00,1,2021-04-01
+P_013,Sunglasses UV400,Accessories,Nova Goods,74.99,18.00,0,2021-09-15
+P_014,Compression Tee,apparel,FlexFit,44.99,14.00,1,2022-07-20
+P_015,Slip-on Sneaker,FOOTWEAR,SwiftStep,89.99,34.00,1,2022-11-05

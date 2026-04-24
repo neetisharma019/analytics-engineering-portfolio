@@ -44,8 +44,3 @@ models:
 seeds:
   ecommerce_analytics:
     +schema: raw
-
-tests:
-  ecommerce_analytics:
-    +store_failures: true
-    +schema: test_failures
