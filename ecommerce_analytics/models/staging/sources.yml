@@ -1,8 +1,8 @@
 version: 2
 
 sources:
-  - name: main_raw
-    schema: main_raw
+  - name: raw
+    schema: raw
     tables:
       - name: raw_orders
       - name: raw_customers

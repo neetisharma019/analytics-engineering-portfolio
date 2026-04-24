@@ -15,7 +15,7 @@ models:
         data_tests:
           - not_null
 
-      - name: product_id_id
+      - name: product_id
         description: Foreign key to stg_product.
         data_tests:
           - not_null

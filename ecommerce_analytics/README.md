@@ -104,7 +104,7 @@ dbt tests run across all staging and mart models.
 - `order_id` — unique, not_null
 - `status` — accepted_values: Completed, Pending, Cancelled, Refunded, Unknown
 - `customer_id` — relationships → dim_customers.customer_id
-- `product_id` — relationships → dim_products.product_id
+- `int_orders_enriched` — intermediate model separates revenue logic from customer joins 
 
 Run all tests:
 ```bash
@@ -202,6 +202,14 @@ Built locally on **DuckDB** (dev). Production target: **Snowflake**.
 
 Switching to Snowflake requires only a `profiles.yml` change — no model code changes needed.
 
+## Additions
+
+- **Incremental model**: `fct_orders` processes only new orders on each run
+- **Intermediate layer**: `int_orders_enriched` separates revenue logic from customer joins
+- **SCD Type 2 snapshot**: `snap_customers` tracks tier and attribute changes over time
+- **Advanced testing**: `dbt_expectations` range and regex tests across all models
+- **store_failures**: failing test records written to `test_failures` schema for debugging
+- **Airflow orchestration**: daily `dbt build` triggered via BashOperator DAG
 ---
 
 *Part of the Analytics Engineering Portfolio · [View all projects](../README.md)*

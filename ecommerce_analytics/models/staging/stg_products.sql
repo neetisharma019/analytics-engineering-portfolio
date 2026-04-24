@@ -2,7 +2,7 @@
 
 WITH source AS (
 
-    SELECT * FROM {{ source('main_raw', 'raw_products') }}
+    SELECT * FROM {{ source('raw', 'raw_products') }}
 
 ),
 
