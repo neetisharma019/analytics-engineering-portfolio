@@ -1,0 +1,12 @@
+version: '3'
+services:
+  scheduler:
+    volumes:
+      - /Users/neetisharma/Desktop/analytics-engineering-portfolio/ecommerce_analytics:/usr/local/airflow/include/dbt
+  triggerer:
+    volumes:
+      - /Users/neetisharma/Desktop/analytics-engineering-portfolio/ecommerce_analytics:/usr/local/airflow/include/dbt
+
+  dag-processor:
+    volumes:
+      - /Users/neetisharma/Desktop/analytics-engineering-portfolio/ecommerce_analytics:/usr/local/airflow/include/dbt

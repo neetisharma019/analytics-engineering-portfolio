@@ -14,7 +14,7 @@ renamed AS (
         UPPER(LEFT(TRIM(last_nm), 1))  || LOWER(SUBSTR(TRIM(last_nm), 2))  AS last_name,
         LOWER(TRIM(email_addr))     AS email,
         UPPER(TRIM(cntry_cd))       AS country_code,
-        strptime(reg_dt,['%Y-%m-%d', '%d/%m/%Y'])::DATE              AS registered_date,
+        reg_dt::DATE              AS registered_date,
         UPPER(TRIM(tier))           AS tier,
         mrktng_opt_in::BOOLEAN      AS is_marketing_opted_in
 

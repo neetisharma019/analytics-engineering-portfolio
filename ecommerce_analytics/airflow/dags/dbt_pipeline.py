@@ -1,6 +1,11 @@
 from airflow import DAG
 from airflow.operators.bash import BashOperator
+from cosmos import DbtDag, ProjectConfig, ProfileConfig, ExecutionConfig
+from cosmos.profiles import DuckDBUserPasswordProfileMapping
 from datetime import datetime, timedelta
+from pathlib import Path
+
+DBT_PROJECT_PATH = Path('/usr/local/airflow/include/dbt')
 
 default_args = {
     'owner': 'neeti',
@@ -8,17 +13,20 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-with DAG(
-    dag_id='ecommerce_dbt_pipeline',
-    default_args=default_args,
-    description='Daily dbt build for ShopNova ecommerce pipeline',
+ecommerce_dbt_dag = DbtDag(
+    dag_id='ecommerce_dbt_cosmos',
+    project_config=ProjectConfig(DBT_PROJECT_PATH),
+    profile_config=ProfileConfig(
+        profile_name='ecommerce_analytics',
+        target_name='snowflake',
+        profiles_yml_filepath=Path('/usr/local/airflow/include/profiles.yml')
+    ),
+    execution_config=ExecutionConfig(
+        dbt_executable_path='/usr/local/bin/dbt'
+    ),
     schedule='0 6 * * *',
     start_date=datetime(2024, 1, 1),
     catchup=False,
-    tags=['dbt', 'ecommerce']
-) as dag:
-
-    dbt_build = BashOperator(
-        task_id='dbt_build',
-        bash_command='cd /usr/local/airflow/include/dbt && dbt build --profiles-dir /usr/local/airflow/include'
-    )
+    default_args=default_args,
+    tags=['dbt', 'ecommerce', 'cosmos']
+)
