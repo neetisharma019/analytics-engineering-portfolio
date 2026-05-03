@@ -1,0 +1,26 @@
+order_id,customer_id,order_date,requested_ship_date,order_status,sales_rep,channel,currency,discount_pct,po_number,notes
+SO-2024-001,CUST-001,2024-01-05,2024-01-12,CONFIRMED,Alice Nguyen,Direct,USD,5.0,PO-TC-8801,Priority account - handle first
+SO-2024-002,CUST-003,01/08/2024,01/22/2024,confirmed,Bob Smith,Partner,USD,0.0,PO-AP-3302,
+SO-2024-003,CUST-007,2024-01-10,2024-01-25,SHIPPED,Alice Nguyen,Direct,USD,10.0,PO-LT-5503,Expedited shipping requested
+SO-2024-004,CUST-002,01/15/2024,02/01/2024,Confirmed,Carlos Rivera,Direct,USD,5.0,PO-MS-2204,Healthcare compliance docs required
+SO-2024-005,CUST-005,2024-01-18,2024-02-05,CANCELLED,Bob Smith,Partner,USD,0.0,,Customer cancelled - budget freeze
+SO-2024-006,CUST-010,2024-01-22,2024-02-08,shipped,Alice Nguyen,Direct,USD,7.5,PO-GE-9906,
+SO-2024-007,CUST-004,01/25/2024,02/10/2024,INVOICED,Carlos Rivera,Direct,USD,0.0,PO-RM-4407,
+SO-2024-008,CUST-011,2024-01-30,2024-02-15,CONFIRMED,Alice Nguyen,Direct,USD,10.0,PO-PC-6608,Pharma - requires COA documentation
+SO-2024-009,CUST-013,2024-02-02,2024-02-20,Shipped,Bob Smith,Partner,USD,5.0,PO-NM-7709,
+SO-2024-010,CUST-006,02/05/2024,02/22/2024,INVOICED,Carlos Rivera,Direct,USD,0.0,PO-FS-1110,
+SO-2024-011,CUST-014,2024-02-08,2024-02-25,confirmed,Alice Nguyen,Direct,USD,2.5,PO-CR-3311,
+SO-2024-012,CUST-001,2024-02-12,2024-03-01,SHIPPED,Alice Nguyen,Direct,USD,5.0,PO-TC-8812,Second order from TechCorp Q1
+SO-2024-013,CUST-009,02/14/2024,03/05/2024,Invoiced,Bob Smith,Channel,USD,0.0,PO-ET-2213,
+SO-2024-014,CUST-015,2024-02-20,2024-03-08,CONFIRMED,Carlos Rivera,Partner,USD,5.0,PO-TN-5514,
+SO-2024-015,CUST-002,2024-02-25,2024-03-15,shipped,Alice Nguyen,Direct,USD,5.0,PO-MS-2215,
+SO-2024-016,CUST-008,02/28/2024,03/18/2024,INVOICED,Bob Smith,Direct,USD,0.0,PO-FG-8816,
+SO-2024-017,CUST-003,2024-03-04,2024-03-20,confirmed,Carlos Rivera,Partner,USD,0.0,PO-AP-3317,
+SO-2024-018,CUST-007,2024-03-07,2024-03-25,Shipped,Alice Nguyen,Direct,USD,10.0,PO-LT-5518,
+SO-2024-019,CUST-011,03/10/2024,03/28/2024,INVOICED,Bob Smith,Direct,USD,10.0,PO-PC-6619,
+SO-2024-020,CUST-004,2024-03-15,2024-04-02,CONFIRMED,Carlos Rivera,Direct,USD,0.0,PO-RM-4420,
+SO-2024-021,CUST-012,2024-03-20,,on hold,,Partner,USD,0.0,,Customer flagged - credit review
+SO-2024-022,CUST-010,03/22/2024,04/10/2024,shipped,Alice Nguyen,Direct,USD,7.5,PO-GE-9922,
+SO-2024-023,CUST-013,2024-04-01,2024-04-18,CONFIRMED,Bob Smith,Partner,USD,5.0,PO-NM-7723,
+SO-2024-024,CUST-006,2024-04-05,2024-04-22,Invoiced,Carlos Rivera,Direct,USD,0.0,PO-FS-1124,
+SO-2024-025,CUST-001,04/10/2024,04/28/2024,SHIPPED,Alice Nguyen,Direct,USD,5.0,PO-TC-8825,Q2 renewal order

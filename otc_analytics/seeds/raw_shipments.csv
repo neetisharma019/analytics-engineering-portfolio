@@ -1,0 +1,21 @@
+shipment_id,order_id,ship_date,carrier,tracking_number,ship_to_name,ship_to_address,ship_to_city,ship_to_state,ship_to_zip,status,weight_lbs,notes
+SHIP-001,SO-2024-003,2024-01-14,FedEx,794644792798,LogiTrans Inc,4500 Logistics Way,Dallas,TX,75247,DELIVERED,42.5,
+SHIP-002,SO-2024-006,2024-01-26,UPS,1Z999AA10123456784,GreenEnergy Co,1700 Lincoln St,Denver,CO,80203,delivered,8.2,
+SHIP-003,SO-2024-007,2024-02-02,FEDEX,794644792801,RetailMax Corp,350 5th Avenue,New York,NY,10118,DELIVERED,95.0,Large shipment - liftgate required
+SHIP-004,SO-2024-009,2024-02-12,fedex,794644792815,Nexus Manufacturing,5600 Industrial Pkwy,Cleveland,OH,44125,Delivered,28.6,
+SHIP-005,SO-2024-012,2024-02-20,UPS,1Z999AA10123456799,TechCorp Inc,100 Market St,San Francisco,CA,94105,DELIVERED,15.3,
+SHIP-006,SO-2024-013,2024-02-18,USPS,9400111899223397613946,EduTech Solutions,1301 5th Ave,Seattle,WA,98101,delivered,3.1,Media mail rate applied
+SHIP-007,SO-2024-015,2024-03-08,FedEx,794644792833,MedSupply LLC,2400 N Lakeview Ave,Chicago,IL,60614,DELIVERED,112.4,Fragile - server equipment
+SHIP-008,SO-2024-016,2024-03-05,ups,1Z999AA10123456821,FinServ Group,200 State St,Boston,MA,02109,Delivered,2.0,Documents only
+SHIP-009,SO-2024-018,2024-03-14,FedEx Freight,794644792844,LogiTrans Inc,4500 Logistics Way,Dallas,TX,75247,DELIVERED,187.5,Freight shipment
+SHIP-010,SO-2024-019,2024-03-20,FEDEX,794644792856,PharmaCare Ltd,1 Pharma Plaza,Newark,NJ,07102,delivered,145.2,Temp controlled packaging
+SHIP-011,SO-2024-022,2024-04-01,UPS,1Z999AA10123456837,GreenEnergy Co,1700 Lincoln St,Denver,CO,80203,DELIVERED,5.5,
+SHIP-012,SO-2024-001,2024-01-15,FedEx,794644792867,TechCorp Inc,100 Market St Ste 400,San Francisco,CA,94105,delivered,1.2,Software - electronic delivery + docs
+SHIP-013,SO-2024-004,2024-02-05,freight co.,794644792878,MedSupply LLC,2400 N Lakeview Ave,Chicago,IL,60614,DELIVERED,256.0,3 server units
+SHIP-014,SO-2024-008,2024-02-10,FedEx,794644792889,PharmaCare Ltd,1 Pharma Plaza,Newark,NJ,07102,In Transit,178.3,Delayed - weather
+SHIP-015,SO-2024-011,2024-02-22,UPS,1Z999AA10123456842,Coastal Retail Group,800 Ocean Dr,Jacksonville,FL,32202,DELIVERED,4.8,
+SHIP-016,SO-2024-014,2024-03-01,FEDEX FREIGHT,794644792900,TrueNorth Logistics,300 S 6th St,Minneapolis,MN,55402,delivered,210.0,
+SHIP-017,SO-2024-020,2024-03-28,ups,1Z999AA10123456858,RetailMax Corp,350 5th Avenue Floor 12,New York,NY,10118,PENDING,,10 license keys - email delivery
+SHIP-018,SO-2024-023,2024-04-10,FedEx,794644792911,Nexus Manufacturing,5600 Industrial Pkwy,Cleveland,OH,44125,delivered,35.2,
+SHIP-019,SO-2024-024,2024-04-15,USPS,9400111899223397614012,FoodService Pro,1600 Peachtree St NW,Atlanta,GA,30309,Delivered,2.5,
+SHIP-020,SO-2024-025,2024-04-18,fedex,794644792922,TechCorp Inc,100 Market St Ste 400,San Francisco,CA,94105,DELIVERED,6.0,

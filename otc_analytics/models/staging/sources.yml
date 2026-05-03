@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: raw
+    database: "{{ env_var('SNOWFLAKE_DATABASE', 'ANALYTICS') }}"
+    schema: raw
+    description: "Raw seed data for NovaTech O2C pipeline"
+    tables:
+      - name: raw_customers
+        description: "B2B customer accounts — intentionally messy (mixed casing, date formats, nulls)"
+      - name: raw_products
+        description: "Product catalog with pricing and lead times"
+      - name: raw_sales_orders
+        description: "Order headers across multiple sales channels"
+      - name: raw_order_lines
+        description: "Line items per order — includes string qty values and nulls"
+      - name: raw_shipments
+        description: "Fulfillment records — inconsistent carrier naming"
+      - name: raw_invoices
+        description: "Invoice headers — mixed payment status values"
+      - name: raw_payments
+        description: "Payments received — includes duplicates and partial payments"

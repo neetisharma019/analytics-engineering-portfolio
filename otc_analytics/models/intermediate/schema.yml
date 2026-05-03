@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: int_orders_with_lines
+    description: "Orders joined with aggregated line totals and product counts"
+
+  - name: int_invoices_with_payments
+    description: "Invoices enriched with payment totals, balance due, and days outstanding"
+
+  - name: int_orders_fulfillment
+    description: "Orders joined to shipment status for delivery performance analysis"

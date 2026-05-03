@@ -1,0 +1,232 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: >
+      Cleaned and standardized B2B customer accounts sourced from raw_customers.
+      Normalizes company name casing, unifies country codes (USA/United States → US),
+      and standardizes status values.
+    columns:
+      - name: customer_id
+        description: Primary key. Unique identifier for each customer account.
+        tests:
+          - unique
+          - not_null
+      - name: company_name
+        description: Cleaned company name in title case.
+      - name: industry
+        description: Customer industry segment in title case.
+      - name: email
+        description: Primary contact email, lowercased and trimmed.
+      - name: country
+        description: Normalized ISO-2 country code (USA and United States coerced to US).
+      - name: payment_terms
+        description: Contractual payment terms (e.g. NET30, NET60), uppercased.
+      - name: credit_limit
+        description: Maximum approved credit exposure for this customer in USD.
+      - name: status
+        description: Account status — ACTIVE or INACTIVE.
+      - name: created_date
+        description: Date the customer account was created, parsed from mixed date formats.
+
+  - name: stg_products
+    description: >
+      Cleaned product catalog sourced from raw_products. Normalizes casing on
+      product name and category. PROD-008 (Consulting Hours) has a null unit_price
+      — cost_price serves as the cost floor for that SKU.
+    columns:
+      - name: product_id
+        description: Primary key. Unique identifier for each product.
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Product display name in title case.
+      - name: category
+        description: Product category in title case (e.g. Hardware, Software, Services).
+      - name: sku
+        description: Stock-keeping unit code, uppercased.
+      - name: unit_price
+        description: List selling price per unit. Null for consulting SKUs (PROD-008).
+      - name: cost_price
+        description: Internal cost per unit. Used as cost floor when unit_price is null.
+      - name: unit_of_measure
+        description: Unit of measure (e.g. EACH, HOUR), uppercased.
+      - name: status
+        description: Whether the product is currently sold — ACTIVE or INACTIVE.
+      - name: lead_time_days
+        description: Typical fulfillment lead time from order to ship, in days.
+
+  - name: stg_sales_orders
+    description: >
+      Cleaned order headers sourced from raw_sales_orders. Normalizes order status
+      casing, unifies channel and currency values, and parses mixed date formats
+      (YYYY-MM-DD and MM/DD/YYYY).
+    columns:
+      - name: order_id
+        description: Primary key. Unique identifier for each sales order.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        tests:
+          - not_null
+      - name: order_date
+        description: Date the order was placed, parsed from mixed formats.
+      - name: requested_ship_date
+        description: Customer-requested ship-by date, used for on-time delivery calculations.
+      - name: order_status
+        description: >
+          Normalized order lifecycle status.
+          Values: CONFIRMED, SHIPPED, INVOICED, CANCELLED, ON_HOLD.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['CONFIRMED', 'SHIPPED', 'INVOICED', 'CANCELLED', 'ON_HOLD']
+      - name: order_discount_pct
+        description: Order-level discount percentage (0–100 scale). Defaults to 0 when null.
+      - name: channel
+        description: Sales channel in title case (e.g. Direct, Partner, Online).
+      - name: currency
+        description: Transaction currency code, uppercased (e.g. USD).
+
+  - name: stg_order_lines
+    description: >
+      Cleaned order line items sourced from raw_order_lines. Resolves word-form
+      quantities (ONE, TWO, THREE) to integers and recalculates line_total when
+      missing from source. Flags rows where quantity could not be parsed.
+    columns:
+      - name: line_id
+        description: Primary key. Unique identifier for each order line.
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to stg_sales_orders.
+        tests:
+          - not_null
+      - name: product_id
+        description: Foreign key to stg_products.
+        tests:
+          - not_null
+      - name: quantity
+        description: >
+          Ordered quantity as an integer. Word-form values (e.g. 'two') are
+          coerced; null when the source value cannot be resolved.
+      - name: unit_price
+        description: Per-unit selling price at time of order. Null for consulting lines.
+      - name: line_discount_pct
+        description: Line-level discount percentage (0–100 scale). Defaults to 0 when null.
+      - name: line_total
+        description: >
+          Net line value after discount. Sourced directly when present;
+          recalculated as quantity × unit_price × (1 − discount_pct/100) when null.
+      - name: has_unparseable_quantity
+        description: >
+          True when quantity could not be resolved to an integer. Rows with this
+          flag set should be excluded from volume and revenue aggregations.
+
+  - name: stg_shipments
+    description: >
+      Cleaned shipment records sourced from raw_shipments. Normalizes carrier names
+      (FedEx/FEDEX/fedex → FedEx) and standardizes status casing. Preserves raw
+      carrier value for auditing.
+    columns:
+      - name: shipment_id
+        description: Primary key. Unique identifier for each shipment.
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to stg_sales_orders.
+        tests:
+          - not_null
+      - name: ship_date
+        description: Actual date goods were shipped.
+      - name: carrier
+        description: >
+          Normalized carrier name. Values: FedEx, FedEx Freight, UPS, USPS, Other.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['FedEx', 'FedEx Freight', 'UPS', 'USPS', 'Other']
+      - name: carrier_raw
+        description: Original carrier string from source, preserved for audit purposes.
+      - name: status
+        description: Shipment delivery status, uppercased (e.g. DELIVERED, IN TRANSIT, PENDING).
+      - name: weight_lbs
+        description: Shipment weight in pounds. Null when zero or not recorded.
+
+  - name: stg_invoices
+    description: >
+      Cleaned invoice headers sourced from raw_invoices. Standardizes payment status
+      values and parses mixed date formats. days_overdue is sourced directly from
+      the raw system; recalculated values are available in int_invoices_enriched.
+    columns:
+      - name: invoice_id
+        description: Primary key. Unique identifier for each invoice.
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to stg_sales_orders.
+        tests:
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        tests:
+          - not_null
+      - name: invoice_date
+        description: Date the invoice was issued.
+      - name: due_date
+        description: Payment due date per contractual terms.
+      - name: invoice_amount
+        description: Pre-tax invoice value in the transaction currency.
+      - name: tax_amount
+        description: Tax amount applied to the invoice.
+      - name: total_amount
+        description: Total invoice value including tax (invoice_amount + tax_amount).
+      - name: payment_terms
+        description: Payment terms on this invoice (e.g. NET30), uppercased.
+      - name: payment_status
+        description: >
+          Current payment state. Values: PAID, OUTSTANDING, OVERDUE, PARTIAL.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['PAID', 'OUTSTANDING', 'OVERDUE', 'PARTIAL']
+
+  - name: stg_payments
+    description: >
+      Cleaned payment records sourced from raw_payments. Normalizes payment method
+      labels and deduplicates using a QUALIFY window — zero-amount rows and rows
+      with duplicate notes are flagged via is_duplicate_flag rather than dropped,
+      preserving auditability.
+    columns:
+      - name: payment_id
+        description: Primary key. Unique identifier for each payment record.
+        tests:
+          - unique
+          - not_null
+      - name: invoice_id
+        description: Foreign key to stg_invoices.
+        tests:
+          - not_null
+      - name: payment_date
+        description: Date the payment was received or processed.
+      - name: amount
+        description: Payment amount in the transaction currency.
+      - name: payment_method
+        description: >
+          Normalized payment method. Values: ACH, WIRE_TRANSFER, CHECK.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ACH', 'WIRE_TRANSFER', 'CHECK']
+              config:
+                where: "payment_method is not null"
+      - name: is_duplicate_flag
+        description: >
+          True for zero-amount rows or rows whose notes indicate a duplicate entry.
+          Excluded from amount_paid aggregations in int_invoices_enriched.

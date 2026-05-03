@@ -1,0 +1,16 @@
+customer_id,company_name,industry,contact_name,email,phone,billing_address,city,state,country,payment_terms,credit_limit,status,created_date
+CUST-001,TechCorp Inc,Technology,Sarah Johnson,sjohnson@techcorp.com,415-555-0101,100 Market St Ste 400,San Francisco,CA,US,NET30,250000,ACTIVE,2022-01-15
+CUST-002,medsupply llc,Healthcare,Robert Chen,r.chen@medsupply.com,312-555-0202,2400 N Lakeview Ave,Chicago,IL,USA,NET60,500000,active,01/20/2022
+CUST-003,AutoParts Direct,Automotive,Maria Garcia,mgarcia@autopartsdirect.com,,7800 Ford Blvd,Detroit,MI,US,NET45,175000,Active,2022-03-08
+CUST-004,RetailMax Corp,Retail,James Wilson,jwilson@retailmax.com,646-555-0404,350 5th Avenue Floor 12,New York,NY,United States,NET30,300000,ACTIVE,2022-03-22
+CUST-005,BuildRight Construction,Construction,Emily Davis,emily.davis@buildright.com,713-555-0505,9900 Richmond Ave,Houston,TX,US,NET45,400000,active,04/05/2022
+CUST-006,FoodService Pro,Food & Beverage,Michael Brown,mbrown@foodservicepro.com,404-555-0606,1600 Peachtree St NW,Atlanta,GA,USA,NET30,150000,ACTIVE,2022-05-11
+CUST-007,logitrans inc,Logistics,Jennifer Lee,jlee@logitrans.com,214-555-0707,4500 Logistics Way,Dallas,TX,US,NET60,600000,Active,06/18/2022
+CUST-008,FinServ Group,Financial Services,David Martinez,d.martinez@finservgroup.com,617-555-0808,200 State St,Boston,MA,USA,NET15,200000,ACTIVE,2022-07-02
+CUST-009,EduTech Solutions,Education,Amanda White,awhite@edutech.com,206-555-0909,1301 5th Ave Ste 2900,Seattle,WA,US,NET30,100000,active,08/14/2022
+CUST-010,GreenEnergy Co,Energy,Christopher Taylor,ctaylor@greenenergy.com,303-555-1010,1700 Lincoln St,Denver,CO,USA,NET45,350000,ACTIVE,2022-09-29
+CUST-011,PharmaCare Ltd,Pharmaceutical,Stephanie Anderson,,908-555-1111,1 Pharma Plaza,Newark,NJ,US,NET60,750000,Active,2022-10-07
+CUST-012,agrifresh farms,Agriculture,Thomas Jackson,tjackson@agrifresh.com,559-555-1212,8200 Farmland Rd,Fresno,CA,United States,NET30,80000,INACTIVE,11/30/2022
+CUST-013,Nexus Manufacturing,Manufacturing,Lisa Thompson,lthompson@nexusmfg.com,216-555-1313,5600 Industrial Pkwy,Cleveland,OH,US,NET45,425000,active,2023-01-17
+CUST-014,COASTAL RETAIL GROUP,Retail,Kevin Harris,k.harris@coastalretail.com,904-555-1414,800 Ocean Dr,Jacksonville,FL,USA,NET30,225000,ACTIVE,01/28/2023
+CUST-015,TrueNorth Logistics,Logistics,Patricia Young,pyoung@truenorth.com,612-555-1515,300 S 6th St,Minneapolis,MN,US,NET60,550000,active,2023-03-05

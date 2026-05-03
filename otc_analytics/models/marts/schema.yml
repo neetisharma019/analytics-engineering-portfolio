@@ -1,0 +1,250 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: >
+      Customer dimension table. One row per customer account, sourced from
+      stg_customers and enriched with first order date and tenure metrics
+      derived from stg_sales_orders. Materialized as a table.
+    columns:
+      - name: customer_id
+        description: Primary key. Unique identifier for each customer.
+        tests:
+          - unique
+          - not_null
+      - name: company_name
+        description: Cleaned company name in title case.
+      - name: industry
+        description: Customer industry segment (e.g. Technology, Automotive, Logistics).
+      - name: contact_name
+        description: Primary contact person at the customer account.
+      - name: email
+        description: Primary contact email address.
+      - name: city
+        description: Customer billing city in title case.
+      - name: state
+        description: Customer billing state as a two-letter US code.
+      - name: country
+        description: Normalized ISO-2 country code.
+      - name: payment_terms
+        description: Contractual payment terms (e.g. NET30, NET60).
+      - name: credit_limit
+        description: Maximum approved credit exposure for this customer in USD.
+      - name: status
+        description: Account status — ACTIVE or INACTIVE.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ACTIVE', 'INACTIVE']
+      - name: created_date
+        description: Date the customer account was first created in the system.
+      - name: first_order_date
+        description: Date of the customer's earliest sales order. Null for customers with no orders.
+      - name: days_since_first_order
+        description: >
+          Number of days between first_order_date and the current date.
+          Null for customers with no orders. Used to segment customer tenure.
+
+  - name: dim_products
+    description: >
+      Product dimension table. One row per product, sourced from stg_products
+      and enriched with gross_margin_pct derived from unit_price and cost_price.
+      Materialized as a table.
+    columns:
+      - name: product_id
+        description: Primary key. Unique identifier for each product.
+        tests:
+          - unique
+          - not_null
+      - name: product_name
+        description: Product display name in title case.
+      - name: category
+        description: Product category (e.g. Hardware, Software, Services).
+      - name: sku
+        description: Stock-keeping unit identifier, uppercased.
+      - name: unit_price
+        description: List selling price per unit in USD. Null for consulting SKUs.
+      - name: cost_price
+        description: Internal cost per unit in USD.
+      - name: unit_of_measure
+        description: Selling unit (e.g. EACH, HOUR, LICENSE).
+      - name: status
+        description: Whether the product is currently offered — ACTIVE or INACTIVE.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ACTIVE', 'INACTIVE']
+      - name: lead_time_days
+        description: Typical days from order placement to shipment for this product.
+      - name: gross_margin_pct
+        description: >
+          (unit_price − cost_price) / unit_price × 100. Null for products where
+          unit_price is null or zero (e.g. PROD-008 Consulting Hours).
+
+  - name: fct_order_lines
+    description: >
+      Order line fact table at the line-item grain. Joins int_order_lines_enriched
+      with dim_customers and dim_products to produce a fully-denormalized analytical
+      view of revenue, cost, margin, and delivery performance per line.
+      Materialized as a table.
+    columns:
+      - name: line_id
+        description: Primary key. Unique identifier for each order line.
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to the parent sales order.
+        tests:
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customers.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: product_id
+        description: Foreign key to dim_products.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_id
+      - name: order_date
+        description: Date the parent sales order was placed.
+      - name: ship_date
+        description: Actual shipment date. Null for unshipped orders.
+      - name: requested_ship_date
+        description: Customer-requested ship-by date, used to compute is_on_time_delivery.
+      - name: order_status
+        description: Normalized status of the parent order.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['CONFIRMED', 'SHIPPED', 'INVOICED', 'CANCELLED', 'ON_HOLD']
+      - name: shipment_status
+        description: Current delivery status of the associated shipment.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['DELIVERED', 'IN TRANSIT', 'PENDING']
+              config:
+                where: "shipment_status is not null"
+      - name: region
+        description: >
+          US Census-based region derived from the customer's billing state.
+          Values: Northeast, Southeast, Midwest, West, Other.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Northeast', 'Southeast', 'Midwest', 'West', 'Other']
+              config:
+                where: "region is not null"
+      - name: quantity
+        description: Ordered quantity as an integer.
+      - name: unit_price
+        description: Per-unit selling price at time of order.
+      - name: line_discount_pct
+        description: Line-level discount percentage (0–100 scale).
+      - name: gross_revenue
+        description: quantity × unit_price before any discount.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 500000
+              config:
+                where: "gross_revenue is not null"
+      - name: discount_amount
+        description: Absolute discount value — quantity × unit_price × (line_discount_pct / 100).
+      - name: revenue
+        description: Net revenue after line discount — quantity × unit_price × (1 − line_discount_pct / 100).
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 500000
+              config:
+                where: "revenue is not null"
+      - name: cost
+        description: Total line cost — quantity × cost_price from dim_products.
+      - name: gross_profit
+        description: revenue − cost. Negative values indicate below-cost pricing.
+      - name: is_on_time_delivery
+        description: True when ship_date <= requested_ship_date. False when late. Null when ship_date is unknown.
+      - name: days_to_ship
+        description: Calendar days between order_date and ship_date. Null for unshipped lines.
+      - name: has_unparseable_quantity
+        description: Carried from stg_order_lines — true when source quantity could not be parsed.
+
+  - name: fct_invoices
+    description: >
+      Invoice fact table at the invoice grain. Joins int_invoices_enriched with
+      dim_customers to produce a fully-denormalized view of billing, collections,
+      and aging metrics per invoice. Materialized as a table.
+    columns:
+      - name: invoice_id
+        description: Primary key. Unique identifier for each invoice.
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to the originating sales order.
+        tests:
+          - not_null
+      - name: customer_id
+        description: Foreign key to dim_customers.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: invoice_date
+        description: Date the invoice was issued to the customer.
+      - name: due_date
+        description: Contractual payment due date.
+      - name: payment_terms
+        description: Payment terms applied to this invoice (e.g. NET30).
+      - name: invoice_status
+        description: >
+          Current payment state of the invoice.
+          Values: PAID, OUTSTANDING, OVERDUE, PARTIAL.
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['PAID', 'OUTSTANDING', 'OVERDUE', 'PARTIAL']
+      - name: invoice_amount
+        description: Pre-tax invoice value in the transaction currency.
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              arguments:
+                min_value: 0
+                max_value: 500000
+      - name: tax_amount
+        description: Tax amount applied to this invoice.
+      - name: total_amount
+        description: Total invoice value including tax.
+      - name: amount_paid
+        description: >
+          Sum of non-duplicate payments received against this invoice.
+          Zero for invoices with no payments on record.
+      - name: outstanding_amount
+        description: invoice_amount − amount_paid. Zero or negative once fully settled.
+      - name: payment_count
+        description: Number of non-duplicate payment records linked to this invoice.
+      - name: last_payment_date
+        description: Date of the most recent payment received. Null when no payments exist.
+      - name: days_to_due
+        description: Calendar days from invoice_date to due_date (payment window length).
+      - name: days_outstanding
+        description: >
+          Calendar days from invoice_date to today, for unpaid invoices.
+          Null once invoice_status is PAID.
+      - name: is_overdue
+        description: >
+          True when due_date is in the past and invoice_status is not PAID.
+          Includes PARTIAL and OUTSTANDING invoices past their due date.

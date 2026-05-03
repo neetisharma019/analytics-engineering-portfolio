@@ -1,0 +1,13 @@
+product_id,product_name,category,sku,unit_price,cost_price,unit_of_measure,status,lead_time_days,created_date
+PROD-001,Enterprise Software License,Software,ENT-SW-001,12000.00,2400.00,License,ACTIVE,1,2021-06-01
+PROD-002,Annual Support Contract,Services,SVC-SUP-ANN,3600.00,900.00,Contract,active,3,2021-06-01
+PROD-003,hardware server unit,Hardware,HW-SVR-PRO,8500.00,5100.00,Unit,ACTIVE,14,2021-08-15
+PROD-004,Network Switch 24-Port,Hardware,HW-NSW-24P,1200.00,720.00,Unit,Active,7,2021-08-15
+PROD-005,Cloud Storage - 1TB,Cloud,CLD-STG-1TB,240.00,48.00,TB/Month,ACTIVE,1,2021-10-01
+PROD-006,Security Suite Pro,Software,SEC-STE-PRO,4800.00,960.00,License,ACTIVE,1,2022-01-15
+PROD-007,Training Package - 5 Days,Services,SVC-TRN-5D,7500.00,2250.00,Package,active,30,2022-01-15
+PROD-008,Consulting Hours,Services,SVC-CON-HR,,175.00,Hour,Active,7,2022-03-01
+PROD-009,data backup service,Cloud,CLD-BKP-MON,180.00,36.00,Month,ACTIVE,1,2022-03-01
+PROD-010,Wireless Access Point,Hardware,HW-WAP-ENT,650.00,390.00,Unit,ACTIVE,7,2022-05-20
+PROD-011,Firewall Appliance,Hardware,HW-FWL-ENT,3200.00,1920.00,Unit,active,10,2022-05-20
+PROD-012,PROFESSIONAL SERVICES BUNDLE,Services,SVC-PSB-ENT,25000.00,10000.00,Bundle,Active,14,2022-09-01
